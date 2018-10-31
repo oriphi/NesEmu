@@ -79,6 +79,60 @@ static void set_flag( cpu6502 * cpu, int FLAG )
 	cpu -> flags[FLAG] = 1;
 }
 
+static void cpu_adc( cpu6502 * cpu)
+{
+	unsigned int address;
+	switch(cpu -> opcode)
+	{
+		case 0x69:
+			// Immediate
+			tmp = cpu -> A + cpu -> RAM[cpu -> pc + 1] + cpu -> flags[FLAG_C];
+			cpu -> cycles += 2;
+			cpu -> pc += 2;
+			break;
+		case 0x65:
+			//Zero Page
+			tmp = cpu -> A + cpu -> RAM[cpu -> pc + 1] + cpu -> flags[FLAG_C];
+			break;
+		case 0x75:
+			//Zero Page X
+			tmp = cpu -> A + cpu -> RAM[cpu -> X + cpu -> pc + 1] + cpu -> flags[FLAG_C];
+			break;
+		case 0x6d:
+			//Absolute
+			address = cpu -> RAM[cpu -> pc + 1];
+			tmp = cpu -> A + cpu -> RAM[address] + cpu -> flag[FLAG_C];
+			break;
+		case 0x7d:
+			//Absolute,X
+			address = cpu -> RAM[cpu -> pc + 1] + cpu -> X;
+			tmp = cpu -> A + cpu -> RAM[address] + cpu -> flag[FLAG_C];
+			break;
+		case 0x79:
+			//Absolute,Y
+			address = cpu -> RAM[cpu -> pc + 1] + cpu -> Y;
+			tmp = cpu -> A + cpu -> RAM[address] + cpu -> flag[FLAG_C];
+			break;
+
+		case 0x61:
+			//Indirect,X
+
+			break;
+		case 0x71:
+			// Indirect,Y
+			break;
+	}
+	if(tmp > 255)
+	{
+		set_flag(cpu, FLAG_C);
+		set_flag(cpu, FLAG_V);
+		set_flag(cpu, FLAG_N);
+	}
+
+	cpu -> A = tmp % 256;
+	if( !cpu -> A )set_flag(cpu, FLAG_Z);
+}	
+
 /*
  *         
  *
@@ -110,32 +164,14 @@ int main(int argc, char * argv[])
 		{
 			// ADC
 			case 0x69:
-				tmp = cpu -> A + cpu -> RAM[cpu -> pc + 1] + cpu -> flags[FLAG_C];
-				if(tmp > 255)
-				{
-					set_flag(cpu, FLAG_C);
-					set_flag(cpu, FLAG_V);
-					set_flag(cpu, FLAG_N);
-				}
-
-				cpu -> A = tmp % 256;
-				if( !cpu -> A )set_flag(cpu, FLAG_Z);
-				break;
-
 			case 0x65:
-				break;
 			case 0x75:
-				break;
 			case 0x6d:
-				break;
 			case 0x7d:
-				break;
-				break;
 			case 0x79:
-				break;
 			case 0x61:
-				break;
 			case 0x71:
+				cpu_adc(cpu);
 				break;
 		}
 	}

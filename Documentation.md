@@ -87,6 +87,11 @@ On charge directement le registre avec la valeur suivante
 On travaille sur les 256 premiers octets de la RAM
  -> Pas besoin d'utiliser le 1er bit de l'addresse
  -> Instruction sur 2 octets
+
+### Zero Page,X
+
+Zero page avec un offset ( valeur contenue dans X)
+
 ### Absolu
 On indique une addresse complète derrière l'instruction sur 16bits
  -> On modifie la valeur 8bit de l'addresse pointée (sur 16 bits)
@@ -128,7 +133,7 @@ Zero Page	$65		2		3
 Zero Page,X	$75		2		4
 Absolute	$6D		3		4
 Absolute,X	$7D		3		4+
-Absolute,T	$79		3		4+	
+Absolute,Y	$79		3		4+	
 Indirect,X	$61		2		6
 Indirect,Y	$71		2		5+
 

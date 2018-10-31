@@ -19,10 +19,11 @@ typedef struct{
 static cpu6502 * init_cpu6502( );
 static void print_state( cpu6502 * cpu );
 static int console( cpu6502 * cpu );
-static void set_flag( cpu6502 * cpu, int FLAG);
-static void clear_flag( cpu6502 * cpu, int FLAG);
+static void set_flag( cpu6502 * cpu, int FLAG );
+static void clear_flag( cpu6502 * cpu, int FLAG );
 
-
+// OPCODE FUNCTIONS
+static void cpu_adc( cpu6502 * cpu );
 
 
 const int FLAG_C = 0x0;
