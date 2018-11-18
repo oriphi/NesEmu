@@ -1,3 +1,4 @@
+typedef uint16_t address;
 typedef struct{
 	unsigned char RAM[0x10000];
 	uint16_t pc;
@@ -16,6 +17,27 @@ typedef struct{
 
 
 
+void immediate_write(cpu6502 * cpu, unsigned int value);
+void zero_page_write(cpu6502 * cpu, unsigned int value);
+void zero_page_write_X(cpu6502 * cpu, unsigned int value);
+void absolute_write(cpu6502 * cpu, unsigned int value);
+void absolute_write_X(cpu6502 * cpu, unsigned int value);
+void absolute_write_Y(cpu6502 * cpu, unsigned int value);
+void indirect_X_write(cpu6502 * cpu, unsigned int value);
+void indirect_Y_write(cpu6502 * cpu, unsigned int value);
+
+
+address immediate_read(cpu6502 * cpu);
+address zero_page_read(cpu6502 * cpu);
+address zero_page_read_X(cpu6502 * cpu);
+address zero_page_read_Y(cpu6502 * cpu);
+address absolute_read(cpu6502 * cpu);
+address absolute_read_X(cpu6502 * cpu);
+address absolute_read_Y(cpu6502 * cpu);
+address indirect_X_read(cpu6502 * cpu);
+address indirect_Y_read(cpu6502 * cpu);
+
+
 static cpu6502 * init_cpu6502( );
 static void print_state( cpu6502 * cpu );
 static int console( cpu6502 * cpu );
@@ -24,6 +46,10 @@ static void clear_flag( cpu6502 * cpu, int FLAG );
 
 // OPCODE FUNCTIONS
 static void cpu_adc( cpu6502 * cpu );
+static void cpu_lda( cpu6502 * cpu );
+static void cpu_sta( cpu6502 * cpu );
+static void cpu_ldx( cpu6502 * cpu );
+static void cpu_ldy( cpu6502 * cpu );
 
 
 const int FLAG_C = 0x0;

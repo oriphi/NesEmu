@@ -100,6 +100,9 @@ On indique une addresse complète derrière l'instruction sur 16bits
  -> Utilisé seulement par l'instruction JMP
  La valeur utilisée est une addresse mémoire qui contient à son tour une autre addresse mémoire (sur 16bits)
 
+### Absolu X,Y
+
+ -> Addressage Absolu  avec un offset
 ### Indexé Indirect
 La valeur indiquée est une valeur sur 16 bits.
 Le contenu du registre X est ensuite ajouté à cette valeur. On obtient une addresse, et à cette addresse, on trouve une nouvelle adresse, qui est celle de la valeur à modifier.
@@ -118,6 +121,17 @@ Seules es instructions conditionnelles permettent l'adressage relatif. Indique l
 http://www.obelisk.me.uk/6502/reference.html
 
 > + : add 1 cycle if page boundary crossed
+
+> The 6502 has one 8-bit ALU and one 16-bit upcounter (for
+> PC). To calculate a,x or a,y addressing in an instruction
+> other than sta, stx, or sty, it uses the 8-bit ALU to
+> first calculate the low byte while it fetches the high
+> byte. If there's a carry out, it goes oops, applies the
+> carry using the ALU, and repeats the read at the correct
+> address. Store instructions always have this oops cycle:
+> the CPU first reads from the partially added address and
+> then writes to the correct address. The same thing happens
+> on (d),y indirect addressing.
 ### ADC
 
 Add content of memory location to the accumulator + the carry bit
@@ -372,10 +386,10 @@ JSR pushes the address-1 of the next operation on to the stack before transferri
 Affects Flags: S Z
 
 MODE           SYNTAX       HEX LEN TIM
-Immediate     LDA #$44      $A9  2   2
+Immediate     LDA #$44      $A9  2   2     X
 Zero Page     LDA $44       $A5  2   3
 Zero Page,X   LDA $44,X     $B5  2   4
-Absolute      LDA $4400     $AD  3   4
+Absolute      LDA $4400     $AD  3   4     X
 Absolute,X    LDA $4400,X   $BD  3   4+
 Absolute,Y    LDA $4400,Y   $B9  3   4+
 Indirect,X    LDA ($44,X)   $A1  2   6
@@ -564,7 +578,7 @@ There is no way to subtract without the carry which works as an inverse borrow. 
 Affects Flags: none
 
 MODE           SYNTAX       HEX LEN TIM
-Zero Page     STA $44       $85  2   3
+Zero Page     STA $44       $85  2   3     X
 Zero Page,X   STA $44,X     $95  2   4
 Absolute      STA $4400     $8D  3   4
 Absolute,X    STA $4400,X   $9D  3   5
